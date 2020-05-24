@@ -7,6 +7,9 @@ app_name="tower"
 
 urlpatterns = [
     path('',home,name='home'),
-    path('table',table_test,name='table'),
-    path('pdf',pdf_view,name='pdf'),
+
+    path('engineer/workers',engineer_workers,name="engineer_workers"),
+
+    path('test/table',table_test,name='table'),
+    path('test/pdf',pdf_view,name='pdf'),
 ]
