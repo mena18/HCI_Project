@@ -1,0 +1,49 @@
+{% extends 'engineer/base.html' %}
+{% load static %}
+
+{% block title %} Levels {% endblock %}
+
+
+{% block style %}
+<link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+<link rel="stylesheet" href="{% static 'css/engineer_levels.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="main_cont">
+  {% for level in levels %}
+  <div class="box" onclick="change_location('{% url 'tower:engineer_level' level.level__name %}')">
+      <div class="glass"></div>
+      <div class="content">
+          <h2>Floor Level : {{level.level__name}}</h2><br><br>
+          <strong>Foremen : </strong><strong> {{level.foreman_name}}</strong><br>
+          <strong>num of painters : </strong><strong> {{level.painters}}</strong><br>
+          <strong>num of plumbers : </strong><strong> {{level.plumbers}}</strong><br>
+          <strong>num of clean-workers : </strong><strong> {{level.cleaners}}</strong>
+          <div class="skills">
+            <li>
+              {{level.prog}}/{{level.fin}}
+              <h3>PROGRESS</h3><span class="bar"><span class="html"></span></span>
+            </li>
+          </div>
+      </div>
+  </div>
+  {% endfor %}
+
+</div>
+{% endblock %}
+
+
+
+{% block script %}
+
+<script type="text/javascript">
+
+  function change_location(location){
+    window.location = location;
+  }
+
+</script>
+
+{% endblock %}

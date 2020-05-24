@@ -2,7 +2,57 @@
 
 
 {% block content %}
-<h1>Civil Engineer Home</h1>
-<a class="btn btn-primary" href="{% url 'tower:table' %}">Table</a>
-<a class="btn btn-primary ml-5" href="{% url 'tower:pdf' %}">Pdf</a>
+
+
+  <!-- four squares -->
+  <div class="row">
+    <div class="col-md-3 col-sm-6" >
+      <div class="m-3 p-2" style="background-color:green">
+        plumbers : {{plumbers}}
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6" >
+      <div class="m-3 p-2" style="background-color:red">
+        Clean Workers : {{cleaners}}
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6" >
+      <div class="m-3 p-2" style="background-color:green">
+        Painters : {{painters}}
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6" >
+      <div class="m-3 p-2" style="background-color:red">
+          Foremen : {{foremen}}
+      </div>
+    </div>
+  </div>
+
+
+  <!-- two Charts -->
+  <div class="row">
+    <div class="col-md-6 col-sm-6" >
+      <div class="m-3 p-2" style="background-color:green">
+        one
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-6" >
+      <div class="m-3 p-2" style="background-color:red">
+        two
+      </div>
+    </div>
+  </div>
+
+
+  <!-- one Charts -->
+  <div class="row">
+    <div class="col-md-12 col-sm-6" >
+      <div class="m-3 p-2" style="background-color:blue">
+        three
+      </div>
+    </div>
+  </div>
+
+
+
 {% endblock %}

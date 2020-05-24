@@ -167,7 +167,7 @@
 
 <form action="?" method="POST" id='form'>
 
-<table id="table" class="table table-bordered table-sm" cellspacing="0" width="100%">
+<table id="table" class="table table-bordered table-sm table-dark" cellspacing="0" width="100%">
   <thead>
     <tr>
 
@@ -196,48 +196,23 @@
         <input type="checkbox" name="id[]" value="1">
       </td>
     </tr>
+    {% for worker in workers %}
     <tr>
-      <td>Garrett Winters</td>
-      <td>clean Worker</td>
-      <td>2</td>
-      <td>email2@email.com</td>
-      <td>36%</td>
-      <td>
-        <button type="button" class="btn edit btn-info btn-rounded btn-sm buttonEdit" data-toggle="modal" data-target="#modalEdit"
-          >Edit<i class="fas fa-pencil-square-o ml-1"></i></a>
-      </td>
-      <td>
-        <input type="checkbox" name="id[]" value="1">
-      </td>
+        <td>{{worker.username}}</td>
+        <td>{{worker.type}}</td>
+        <td>{{worker.operation_set.count}}</td>
+        <td>{{worker.email}}</td>
+        <td>0</td>
+        <td>
+          <button type="button" class="btn edit btn-info btn-rounded btn-sm buttonEdit" data-toggle="modal" data-target="#modalEdit"
+            >Edit<i class="fas fa-pencil-square-o ml-1"></i></a>
+        </td>
+        <td>
+          <input type="checkbox" name="id[]" value="{{worker.id}}">
+        </td>
     </tr>
-    <tr>
-      <td>Ashton Cox</td>
-      <td>Painter</td>
-      <td>5</td>
-      <td>email3@email.com</td>
-      <td>57%</td>
-      <td>
-        <button type="button" class="btn edit btn-info btn-rounded btn-sm buttonEdit" data-toggle="modal" data-target="#modalEdit"
-          >Edit<i class="fas fa-pencil-square-o ml-1"></i></a>
-      </td>
-      <td>
-        <input type="checkbox" name="id[]" value="1">
-      </td>
-    </tr>
-    <tr>
-      <td>Cedric Kelly</td>
-      <td>Plumber</td>
-      <td>8</td>
-      <td>email4@email.com</td>
-      <td>71%</td>
-      <td>
-        <button type="button" class="btn edit btn-info btn-rounded btn-sm buttonEdit" data-toggle="modal" data-target="#modalEdit"
-          >Edit<i class="fas fa-pencil-square-o ml-1"></i></a>
-      </td>
-      <td>
-        <input type="checkbox" name="id[]" value="1">
-      </td>
-    </tr>
+    {% endfor %}
+    
   </tbody>
   <tfoot>
     <tr>

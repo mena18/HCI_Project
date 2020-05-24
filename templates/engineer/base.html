@@ -1,29 +1,71 @@
 {% load static %}
-
-
+{% load static %}
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>{% block title %}{% endblock %}</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/engineer_dashboard.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css">
+    <title>{% block title %}{% endblock %}</title>
     {% block style %}
 
     {% endblock %}
-  </head>
-  <body>
+</head>
 
+<body>
+    <div class="r_container">
+        <div class="r_navbar">
+            <header>
+              <div class="left_area">
+                <h3>Coding <span>Snow</span></h3>
+              </div>
+              <input type="search" placeholder="search..">
+              <div class="right_area">
+                <a href="#" class="r_logout_btn">Logout</a>
+              </div>
+            </header>
+        </div>
+        <div class="r_sidebar">
+            <center>
+            <img src="{% static 'images/about.jpg' %}" alt="" class="profile_image">
+            <h4>Jessica</h4>
+            </center>
+            <a href="{% url 'tower:engineer_home' %}"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
+            <a href="{% url 'tower:engineer_levels' %}" ><i class="fa fa-building"></i><span>Levels</span></a>
+            <a href="{% url 'tower:engineer_workers' %}"><i class="fas fa-table"></i><span>Workers</span></a>
+            <a href="{% url 'tower:engineer_foremen' %}"><i class="fas fa-table"></i><span>Foremen</span></a>
+        </div>
+        <div class="r_content">
+          <div style="height:1000px">
+            {% block content %}
+            {% endblock %}
+          </div>
+        </div>
+    </div>
 
-    {% block content %}
+    <script>
+        var dropdown = document.getElementsByClassName("drop");
+        var i;
 
-    {% endblock %}
-
-
-
+        for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var dropdownContent = this.nextElementSibling;
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                dropdownContent.style.display = "block";
+            }
+    });
+}
+    </script>
     {% block script %}
 
     {% endblock %}
-  </body>
+</body>
 </html>
