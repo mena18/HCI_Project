@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link type="text/css" rel="stylesheet" href="stylesheet.css" />
+    <title>Coding Train: Data and APIs Project 1</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  </head>
+  <body>
+    <div class="page">
+        <div class="nav_side">
+          <ul>
+            <h2>Side Menu</h2><br><br><br>
+            <li><a href="home.html"><i class="fas fa-home"></i>Dashboard</a></li>
+            <li><a href="#">Empty</a></li>
+            <li><a href="#">Empty</a></li>
+            <li><a href="#">Empty</a></li>
+          </ul>
+        </div>
+        <div class="main_content">
+          <div class="nav_horz">
+            <ul>
+              <li><a href="profile.html"><i class="fas fa-user-circle"></i>.</a></li>
+                <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Sign out</a></li>
+              <li><a href="About.html"><i class="fas fa-address-card"></i> About</a></li>
+              <li><a href="Contact.html"><i class="fas fa-address-book"></i> Contact us</a></li>
+              <li><a href="home.html"><i class="fas fa-home"></i> Home</a></li>
+            </ul>
+            <div class="search_box">
+              <div class="search">
+                <input type="text" name="search" value="" placeholder="What are you looking for ?...">
+              </div>
+              <div class="search_btn">
+                <i class="fas fa-search"></i>
+              </div>
+            </div>
+          </div>
+          <div class="info">
+            <section>
+              <div class="chart">
+                <canvas id="myChart" width="320" height="100"></canvas>
+                <h3></h3>
+                <h4></h4>
+              </div>
+              <div class="chart">
+                <canvas id="myChart2" width="320" height="100"></canvas>
+                <h3></h3>
+                <h4></h4>
+              </div>
+            </section>
+          </div>
+          </div>
+          <footer>
+            <p>Copyright © 2020 The Builders in Alexandria : By Web_team</p>
+          </footer>
+    </div>
+
+
+
+
+
+
+    <script>
+      var xlabels = [];
+      var ydata = [];
+      var yactual=[];
+      var yactual2=[];
+
+      chart();
+
+
+
+    async function chart(){
+      await getData();
+        var ctx = document.getElementById('myChart').getContext('2d');
+        Chart.defaults.global.defaultFontFamily='lato';
+        Chart.defaults.global.defaultFontSize=18;
+        Chart.defaults.global.defaultFontColor='#777';
+        var myChart1 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels:xlabels,
+                datasets: [{
+                    label: 'Planned',
+                    data: ydata,
+                    fill :false,
+                    backgroundColor:'gradientFill',
+                    borderColor: ['rgba(255, 99, 132, 1)'], // red
+                    borderWidth: 2,
+                    pointBackgroundColor: "red"
+
+                },{
+                    label: 'Actual',
+                    data: yactual,
+                    fill :false,
+                    backgroundColor:'gradientFill',
+                    borderColor: ['#1d8cf8'],
+                    borderWidth: 2,
+                    pointBackgroundColor: "#1d8cf8"
+
+                  }]
+            },
+            options: {
+
+              legend: {
+                display:true,
+                position:'right',
+                  labels: {
+                      fontColor: "white",
+                      fontSize: 18,
+
+                  }
+                },
+                title: {
+                  display:true,
+                  text:'Performance',
+                  fontColor: "white",
+                  fontSize:25
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                          fontColor: "white",
+                            fontSize: 14,
+                            stepSize: 5,
+                            beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
+                      ticks: {
+                          fontColor: "white",
+                          fontSize: 14,
+                          stepSize: 1,
+                          beginAtZero: true
+                      }
+                    }]
+                }
+            }
+          });
+
+
+
+          var ctx2 = document.getElementById('myChart2').getContext('2d');
+          Chart.defaults.global.defaultFontFamily='lato';
+          Chart.defaults.global.defaultFontSize=18;
+          Chart.defaults.global.defaultFontColor='#777';
+          var myChart2 = new Chart(ctx2, {
+              type: 'pie',
+              data: {
+                  labels:xlabels,
+                  datasets: [
+                      {
+                      label: 'Actual',
+                      data: yactual2,
+
+
+                      backgroundColor:'gradientFill',
+                      borderColor: '#1d8cf8',
+                      borderWidth: 2,
+                      pointBackgroundColor: "#1d8cf8"
+
+                    }]
+              },
+              options: {
+
+
+                legend: {
+                  display:true,
+                  position:'right',
+                    labels: {
+                        fontColor: "white",
+                        fontSize: 18,
+
+                    }
+                  },
+                  title: {
+                    display:true,
+                    text:'Performance',
+                    fontColor: "white",
+                    fontSize:25
+                  },
+
+              }
+            });
+
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      async function getData() {
+        const response = await fetch('testdata.csv');
+        const data = await response.text();
+        var years = [];
+        var planned = [];
+        var actual = [];
+        var actualPie = [];
+        var rows = data.split('\n').slice(1,-1);
+        for(var i=0 ; i<rows.length ; i++) {
+        const cols = rows[i].split(',');
+        years =cols[0];
+        xlabels.push(years);
+        planned = cols[1];
+        ydata.push(parseFloat(planned));
+        actual = cols[2];
+        yactual.push(parseFloat(actual));
+        //actualPie = cols[3];
+        //yactual2.push(parseFloat(actualPie));
+        }
+        var getvalue = parseFloat(yactual[0]);
+        var total=getvalue;
+        for(var i=0; i<yactual.length;i++)
+        {
+            yactual2.push (((getvalue - parseFloat(yactual[i]))/total)*100) ;
+            getvalue = parseFloat(yactual[i]);
+        }
+
+
+
+      }
+
+    </script>
+  </body>
+</html>
