@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import User
 from .models import *
 from .service import seperate_users,levels_data
+from django.core import serializers
 import random
 from  datetime import datetime,timedelta
 import time
@@ -72,7 +73,15 @@ def worker_home(request):
 
 
 
+
+
 # testing
+
+def download_operations(request):
+    operations = Operation.objects.all();
+    operations = serializers.serialize('json', operations)
+    return HttpResponse(operations, content_type="text/json-comment-filtered")
+
 
 def add_workers(request):
     for i in range(30):
