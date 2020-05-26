@@ -54,33 +54,38 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
+            <form class="" action="{% url 'tower:add_foreman' %}" method="POST">
             <div class="modal-body mx-3">
 
-
-              <form class="" action="index.html" method="post">
+                {% csrf_token %}
                 <div class="md-form mb-5">
-                  <input type="text" id="addName" class="form-control validate">
-                  <label data-error="wrong" data-success="right" for="inputName">Name</label>
+                  <input name="first_name" autocomplete="false" type="text" id="addName" class="form-control validate">
+                  <label data-error="wrong" data-success="right" for="firstName">First Name</label>
                 </div>
 
                 <div class="md-form mb-5">
-                  <input type="text" id="addJob" class="form-control validate">
-                  <label data-error="wrong" data-success="right" for="inputPosition">Job</label>
+                  <input name="last_name" autocomplete="false" type="text" id="addName" class="form-control validate">
+                  <label data-error="wrong" data-success="right" for="lastName">Last Name</label>
                 </div>
 
                 <div class="md-form mb-5">
-                  <input type="text" id="addEmail" class="form-control validate">
+                  <input name="email" readonly onfocus="this.removeAttribute('readonly');" autocomplete="off" type="email" id="addEmail" class="form-control validate">
                   <label data-error="wrong" data-success="right" for="inputOfficeInput">Email</label>
                 </div>
-              </form>
+
+                <div class="md-form mb-5">
+                  <input name="password" type="password" id="addpassword" class="form-control validate">
+                  <label data-error="wrong" data-success="right" for="inputOfficeInput">Password</label>
+                </div>
 
 
             </div>
             <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
-              <button class="btn btn-outline-primary btn-block buttonAdd" data-dismiss="modal">Add Worker
+              <button type='submit' class="btn btn-outline-primary btn-block buttonAdd">Add Worker
                 <i class="fas fa-paper-plane-o ml-1"></i>
               </button>
             </div>
+            </form>
           </div>
         </div>
       </div>
@@ -90,7 +95,7 @@
             class="fas fa-plus-square ml-1"></i></a>
       </div>
 
-      <div class="modal fade modalEditClass" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true">
+      <!-- <div class="modal fade modalEditClass" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header text-center">
@@ -131,7 +136,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
 
       <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDelete"
@@ -165,49 +170,48 @@
 
 <div class="container">
 
-<form action="?" method="POST" id='form'>
-
+<form action="{% url 'tower:delete_foreman' %}" method="POST" id='form'>
+{% csrf_token %}
 <table id="table" class="table table-bordered table-sm table-dark" cellspacing="0" width="100%">
   <thead>
     <tr>
 
       <th class="th-sm">Name</th>
-      <th class="th-sm">Levels</th>
       <th class="th-sm">Email</th>
-      <th class="th-sm"></th>
+      <th class="th-sm">Levels</th>
       <th class="th-sm"><span id='counter'>0</span> row selected</th>
 
     </tr>
   </thead>
   <tbody>
     {% for foreman in foremen %}
-      <tr>
-        <td>{{foreman.username}}</td>
-        <td>{{foreman.levels}}</td>
+    <tr>
+        <td>{{foreman.full_name}}</td>
         <td>{{foreman.email}}</td>
-        <td>
+        <td>{{foreman.levels}}</td>
+        <!-- <td>
           <button type="button" class="btn edit btn-info btn-rounded btn-sm buttonEdit" data-toggle="modal" data-target="#modalEdit"
             >Edit<i class="fas fa-pencil-square-o ml-1"></i></a>
-        </td>
+        </td> -->
         <td>
           <input type="checkbox" name="id[]" value="{{foreman.id}}">
         </td>
-      </tr>
+    </tr>
     {% endfor %}
-
   </tbody>
   <tfoot>
     <tr>
       <th class="th-sm">Name</th>
-      <th class="th-sm">Levels</th>
+      <th class="th-sm">LeveL</th>
       <th class="th-sm">Email</th>
-      <th class="th-sm"></th>
       <th class="th-sm"></th>
     </tr>
   </tfoot>
 </table>
 
-</form>
+    </tr>
+  </tfoot>
+</table>
 
 </div>
 
@@ -215,6 +219,7 @@
 
 
 
+</form>
 
 
 
@@ -233,14 +238,14 @@
 <!-- MDB core JavaScript -->
 <script type="text/javascript" src="{% static 'js/mdb.min.js' %}"></script>
 
-<script type="text/javascript" src="{% static 'js/addons/datatables.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
 
 
 <script >
 $(document).ready(function () {
   let counter = 0;
   $('#table').DataTable({
-    columnDefs: [{orderable: false,targets: 3},{orderable: false,targets: 4}]
+    columnDefs: [{orderable: false,targets: 3}]
   });
   $('.dataTables_length').addClass('bs-select');
 
@@ -265,20 +270,19 @@ $(document).ready(function () {
     $('#form').submit();
   });
 
-  $('.edit').click(function(){
-    let siblings = $(this).parent().siblings()
-    let name = siblings[0].innerText;
-    let job = siblings[1].innerText;
-    let email = siblings[3].innerText;
-    console.log(name,job,email)
-    $('#editName').val(name)
-    $('#editJob').val(job)
-    $('#editEmail').val(email)
-  });
+  // $('.edit').click(function(){
+  //   let siblings = $(this).parent().siblings()
+  //   let first_name = siblings[0].innerText.split(" ")[0];
+  //   let last_name =  siblings[0].innerText.split(" ")[1];
+  //   let email  = siblings[3].innerText;
+  //   console.log(name,job,email)
+  //   $('#editfirstName').val(name)
+  //   $('#editLastName').val(job)
+  //   $('#editEmail').val(email)
+  // });
 
 
   });
-
 
 
 

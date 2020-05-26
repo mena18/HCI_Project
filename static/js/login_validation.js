@@ -13,7 +13,7 @@ function validated() {
     email.focus();
     return false;
   }
-  if(password.value.length <5)
+  if(password.value.length <1)
   {
     password.style.border="3px solid red";
     pass_error.style.display ="block";

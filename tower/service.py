@@ -19,8 +19,8 @@ def seperate_users(users):
     return context
 
 def levels_data():
-    context={}
-    context['levels'] = Operation.objects.values('level__name',foreman_name=F('level__foreman__username'),foreman_id=F('level__foreman__id')).annotate(
+
+    levels= Operation.objects.values('level__name',foreman_name=F('level__foreman__username'),foreman_id=F('level__foreman__id')).annotate(
     cleaners = Count(Case(When(worker__type='cleaner',then=1))),
     plumbers = Count(Case(When(worker__type='plumber',then=1))),
     painters = Count(Case(When(worker__type='painter',then=1))),
@@ -28,8 +28,7 @@ def levels_data():
     fin = Sum('must_finish')
     )
 
-
-    return context
+    return levels
 
 
 

@@ -1,15 +1,26 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Login</title>
+    <title>login</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
   </head>
   <body>
-    <form method="POST" action="{% url 'accounts:login' %}">
-      {% csrf_token %}
-      <input type="text" name="username" placeholder="username">
-      <input type="password" name="password" placeholder="password">
-      <input type="submit" >
-    </form>
+    <div class="logbox">
+      <h1>Login</h1>
+      <form class="textbox" action="{% url 'accounts:login' %}" method="POST" name="form" onsubmit="return validated()">
+        {% csrf_token %}
+        <input type="text" name="email" placeholder="Email">
+        <div id="email_error">please fill up your Email </div>
+        <input type="password" name="password" placeholder="password">
+        <div id="pass_error">please fill up your password</div>
+        <input class="button" type="submit" name="" placeholder=""="submit"><br>
+
+      </form>
+    </div>
+    <script src="{% static 'js/login_validation.js' %} ">
+
+    </script>
   </body>
 </html>

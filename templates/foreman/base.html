@@ -1,5 +1,4 @@
 {% load static %}
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,44 +25,38 @@
               </div>
               <input type="search" placeholder="search..">
               <div class="right_area">
-                <a href="#" class="r_logout_btn">Logout</a>
+                <a href="{% url 'accounts:logout' %}" class="r_logout_btn">Logout</a>
               </div>
             </header>
         </div>
         <div class="r_sidebar">
             <center>
             <img src="{% static 'images/about.jpg' %}" alt="" class="profile_image">
-            <h4>Jessica</h4>
+            <h4>{{user.full_name}}</h4>
             </center>
-            <a href="#"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
-            <a href="#"><i class="fas fa-cogs"></i><span>Components</span></a>
-            <a href="#"><i class="fas fa-table"></i><span>Tables</span></a>
+            <a href="{% url 'tower:foreman_home' %}"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
             <a href="javascript:;" class="drop"><i class="fa fa-building"></i>
             <span>Levels</span>
                <i class="fa fa-caret-down"></i>
-                <div class="r_dropdown-container">
-                    <a href="#">
-                    <i class="fa fa-info"></i>
-                    Level 1</a>
-                    <a href="#">
-                    <i class="fa fa-info"></i>
-                    Level 2</a>
-                    <a href="#">
-                    <i class="fa fa-info"></i>
-                    Level 3</a>
+                <div class="dropdown-container">
+                    {% for level in levels %}
+                      <a href="{% url 'tower:foreman_level' level.name %}"><i class="fa fa-info"></i>Level {{level.name}}</a>
+                    {% endfor %}
+
                 </div>
             </a>
-            <a href="#"><i class="fas fa-th"></i><span>Forms</span></a>
-            <a href="#"><i class="fas fa-info-circle"></i><span>About</span></a>
-            <a href="#"><i class="fas fa-sliders-h"></i><span>Settings</span></a>
         </div>
         <div class="r_content">
-          {% block content %}
+          <div style="height:1000px">
+            {% block content %}
             {% endblock %}
+          </div>
         </div>
     </div>
 
-    <script>
+
+
+  <script>
         var dropdown = document.getElementsByClassName("drop");
         var i;
 
@@ -78,6 +71,31 @@
             }
     });
 }
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script type="text/javascript">
+    function delete_swal(url,message,confirm){
+        swal.fire({
+          title: 'Are you sure?',
+          text: message,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.value) {
+            window.location = url;
+            Swal.fire(
+              'Deleted!',
+              confirm,
+              'success'
+            )
+          }
+        })
+
+      }
     </script>
     {% block script %}
 

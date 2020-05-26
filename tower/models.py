@@ -37,9 +37,15 @@ class Level(models.Model):
 class Operation_type(models.Model):
     name = models.CharField(max_length=30)
     allowed = models.CharField(max_length=30,choices=worker_choices)
+    level = models.ForeignKey(Level,on_delete=models.SET_NULL,null=True,blank=True)
 
     def __str__(self):
-        return f"{self.name} : {self.allowed}"
+        return f"{self.name}"
+
+
+    def operations(self):
+        return Operation.objects.filter(type=self)
+
 
 class Operation(models.Model):
     worker = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
@@ -49,10 +55,21 @@ class Operation(models.Model):
     must_finish = models.IntegerField()
     deadline = models.DateField()
     finished = models.DateField(blank=True,null=True)
+    description = models.TextField(blank=True,null=True);
+
 
     def __str__(self):
         return f'{self.type} : {self.progress}/{self.must_finish}'
 
+
+    def percent(self):
+        return self.progress/self.must_finish
+
+    def get_description(self):
+        if(self.description):
+            return self.description
+        else:
+            return f'{self.type} ({self.must_finish})'
 
 class Messages(models.Model):
     level = models.ForeignKey(Operation,on_delete = models.CASCADE)

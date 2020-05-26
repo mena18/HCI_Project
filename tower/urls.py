@@ -17,6 +17,17 @@ urlpatterns = [
     path("engineer/foremen",engineer_foremen,name="engineer_foremen"),
     path("engineer/levels",engineer_levels,name="engineer_levels"),
     path("engineer/level/<int:num>",engineer_level,name="engineer_level"),
+    path("engineer/level/assign-froeman",assign_foreman,name="assign_foreman"),
+    path("engineer/level/remove-foreman/<int:level_num>",remove_foreman,name="remove_foreman"),
+    path("engineer/worker/add",add_worker,name="add_worker"),
+    path("engineer/worker/edit",edit_worker,name="edit_worker"),
+    path("engineer/worker/delete",delete_worker,name="delete_worker"),
+    path("engineer/foreman/add",add_foreman,name="add_foreman"),
+    path("engineer/foreman/edit",edit_foreman,name="edit_foreman"),
+    path("engineer/foreman/delete",delete_foreman,name="delete_foreman"),
+
+
+
 
     path("foreman/home",foreman_home,name="foreman_home"),
     path('forman/levels',foreman_levels,name="foreman_levels"),

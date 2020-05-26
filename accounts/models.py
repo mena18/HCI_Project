@@ -17,11 +17,11 @@ class User(AbstractUser):
 
     def __str__(self):
         if(self.is_engineer):
-            return f"{self.username} : Engineer"
+            return f"{self.full_name()} : Engineer"
         if(self.is_foreman):
-            return f"{self.username} : Foreman"
+            return f"{self.full_name()} : Foreman"
         else:
-            return f"{self.username} : {self.type}"
+            return f"{self.first_name} {self.last_name} : ({self.type})"
 
     # for foreman
     def levels(self):
@@ -30,5 +30,10 @@ class User(AbstractUser):
             lis.append(str(level.name))
         if(len(lis)>1):
             return f"Levels ({' , '.join(lis)})"
-        else:
+        elif(len(lis)==1):
             return f"Level : {lis[0]}"
+        else:
+            return ""
+
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
