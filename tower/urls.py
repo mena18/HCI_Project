@@ -11,6 +11,8 @@ urlpatterns = [
     path('test/add_workers',add_workers,name="test_add_workers"),
     path('test/add_operations',add_operations,name="test_add_operations"),
     path('test/download_operations',download_operations,name="test_download_operations"),
+    path('test/show_char',show_char,name="test_show_char"),
+    path('test',test,name="test"),
 
     path("engineer/home",engineer_home,name="engineer_home"),
     path('engineer/workers',engineer_workers,name="engineer_workers"),

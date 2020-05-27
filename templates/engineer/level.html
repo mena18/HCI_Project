@@ -3,7 +3,7 @@
 
 
 {% block title %}
-Level
+Level {{level.name}}
 {% endblock %}
 
 {% block style %}
@@ -17,7 +17,7 @@ Level
 
 <!-- start progress part  -->
 <div class="progress_part">
-  <h1 class="align-left">Level</h1>
+  <h1 class="align-left">Level {{level.name}}</h1>
 
   <div class="accordion" id="accordionExample">
     {% for operation_type in operation_types %}
@@ -63,30 +63,18 @@ Level
 <div class="reports">
     <div class="content_side">
       <!-- part of (pdf   x)  -->
-     <div class="pdf">
-    <div class="iconpdf">
-    <a href="#"> <i class="far fa-file-pdf"> PDF1</i></a>
-    </div>
-    <div class="close">
-    <a href="https://www.google.com" style="color:red" class="fas fa-window-close"></a>
-    </div>
-    </div>
+      {% for file in level.files %}
+        <div class="pdf">
+          <div class="iconpdf">
+            <a href="{{ file.get_path }}"> <i class="far fa-file-pdf"> {{ file.title }}</i></a>
+          </div>
+        </div>
+      {% endfor %}
     <!--end  part of (pdf   x)  -->
-    <!-- part of (pdf   x)  -->
-   <div class="pdf">
-  <div class="iconpdf">
-  <a href="#"> <i class="far fa-file-pdf"> PDF2</i></a>
-  </div>
-  <div class="close">
-    <a href="https://www.google.com" style="color:red" class="fas fa-window-close"></a>
-  </div>
-  </div>
+
   <!--end  part of (pdf   x)  -->
     </div>
     <!-- part of (add button)  -->
-  <div class="button_side">
-   <button type="button" name="button"> Add reprot</button>
-  </div>
 </div>
 
 

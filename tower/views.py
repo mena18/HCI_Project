@@ -265,11 +265,91 @@ def worker_home(request):
 
 
 # testing
-
 def download_operations(request):
-    operations = Operation.objects.all();
-    operations = serializers.serialize('json', operations)
-    return HttpResponse(operations, content_type="text/json-comment-filtered")
+    # operations = Operation.objects.all().values();
+    # return JsonResponse(list(operations),safe=False);
+
+
+
+
+    # operations = Operation.objects.all();
+    # operations = serializers.serialize('json', operations)
+    # return HttpResponse(operations, content_type="text/json-comment-filtered")
+
+
+    data = [
+        {
+          "id": 1,
+          "title": "json-server",
+          "author": "typicode",
+
+    	  "level" : 2 ,
+    	  "type" : 1,
+    	  "deadline" : "2020-07-26" ,
+    	  "finished" : "2020-06-28"
+
+        },{
+          "id": 2,
+          "title": "json-server2",
+          "author": "typicode2",
+
+    	  "level" : 4 ,
+    	  "type" : 2,
+    	  "deadline" : "2020-07-30" ,
+    	  "finished" : None
+
+    	 },
+    	 {
+          "id": 3,
+          "title": "json-server3",
+          "author": "typicode3",
+
+    	  "level" : 2 ,
+    	  "type" : 2,
+    	  "deadline" : "2020-06-25" ,
+    	  "finished" : "2020-06-27"
+
+    	 },
+    	 {
+          "id": 4,
+          "title": "json-server4",
+          "author": "typicode4",
+
+    	  "level" : 1,
+    	  "type" : 1,
+    	  "deadline" : "2020-03-27" ,
+    	  "finished" : "2020-03-25"
+
+    	 },
+    	 {
+          "id": 5,
+          "title": "json-server5",
+          "author": "typicode5",
+    	  "level" : 3,
+    	  "type" : 2,
+    	  "deadline" : "2021-03-25" ,
+    	  "finished" : "2020-07-25"
+
+    	 },
+         {
+           "id": 6,
+           "title": "json-server5",
+           "author": "typicode5",
+     	  "level" : 4,
+     	  "type" : 2,
+     	  "deadline" : "2020-05-25" ,
+     	  "finished" : "2020-04-25"
+             	 }
+      ]
+
+
+    return JsonResponse(data,safe=False);
+
+
+
+
+def show_char(request):
+    return render(request,"charts/test_3.html");
 
 
 def add_workers(request):
@@ -283,6 +363,8 @@ def add_workers(request):
         user.set_password('123')
         user.save()
     return HttpResponse("done");
+
+
     # for i in range(30):
     #     user = User()
     #     user.username = f'worker_{i+1}'
@@ -298,18 +380,57 @@ def add_workers(request):
     # return HttpResponse("done");
 
 
+def change_workers_names(request):
+    names='Ahmed Hossam Khaled Tareq Saeed Fady Osman Mohammed Mostafa Aziz Adel Sherif Islam Sameh Sobhy Hamdy '
+    all = User.objects.all()
+    names = names.split(" ")
+    for user in all:
+        user.first_name = random.choice(names)
+        user.last_name = random.choice(names)
+        user.save()
+
+
+def test(request):
+    return add_operations(request)
+
+
+def add_operation_types(request):
+    options=[
+        ['painting', "painter"],
+        ['testing pipes', "plumber"],
+        ['fiting pipes', "plumber"],
+        ['clean rooms', "cleaner"],
+        ['clean stairs', "cleaner"],
+        ['clean bathrooms', "cleaner"],
+    ]
+    for i in range(6):
+        for j in range(10):
+            op_type = Operation_type()
+            op_type.name = options[i][0]
+            op_type.allowed = options[i][1]
+            op_type.level_id = (j+1)
+            op_type.save()
+
+    return HttpResponse(request,"done");
+
 
 def add_operations(request):
     operations_types = Operation_type.objects.all()
-    for i in range(100):
-        operation = Operation()
-        operation.type = operations_types[random.randint(0,len(operations_types)-1)]
-        operation.level_id = random.randint(1,10)
-        operation.must_finish = random.randint(1,60)
-        operation.deadline = datetime.now() + timedelta(days = random.randint(5,30))
-        operation.save()
-        if(i%10==0):
-            print(f"Patch {i*10}")
+    counter=1;
+    for op_type in operations_types:
+        for i in range(3):
+            operation = Operation()
+            operation.type = op_type
+            operation.level = op_type.level
+            operation.must_finish = random.randint(1,60)
+            random_num = random.randint(20,80)
+            operation.deadline = datetime.now() + timedelta(days = random_num)
+            if(random.randint(1,7)>4):
+                sec = max(0,random_num + random.randint(-20,20))
+                operation.finished = datetime.now() + timedelta(days = sec)
+            operation.save()
+        print(f"Patch {counter}")
+        counter+=1
 
 
     return HttpResponse("done");

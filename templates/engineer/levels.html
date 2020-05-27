@@ -28,6 +28,7 @@
   .remove{
     color:black;
   }
+
 </style>
 {% endblock %}
 
@@ -76,7 +77,6 @@
 
 
 
-
 <div class="main_cont">
   {% for level in levels %}
   <div class="box">
@@ -87,10 +87,12 @@
             <strong>Foremen : </strong>
             {% if level.foreman_name %}
               <span class="val"> {{level.foreman_name}}</span>
-              <a class="remove" href="{% url 'tower:remove_foreman' level.level__name %}">x Remove</a>
+              <a title="remove" style="color:red;font-size:25px;" class="remove ml-2 fas fa-backspace" href="{% url 'tower:remove_foreman' level.level__name %}">
+
+              </a>
             {% else %}
               <span class="val">
-                <button onclick="mod({{level.level__name}})" type="button"class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">+ Add</button>
+                <a style="width:90px; padding: 8px;" onclick="mod({{level.level__name}})" class="btn btn-primary" data-toggle="modal" data-target="#myModal">+ Add</a>
               </span>
             {% endif %}
           </div>
@@ -103,13 +105,12 @@
           <div class="">
             <strong>num of clean-workers : </strong><span class="val"> {{level.cleaners}}</span>
           </div>
+
           <div class="skills">
-            <li>
-              {{level.prog}}/{{level.fin}}
-              <h3>PROGRESS</h3><span class="bar"><span class="html"></span></span>
-            </li>
-            <a class="more_info" href="{% url 'tower:engineer_level' level.level__name %}">more information >> </a>
+            <label for="file"><h3>PROGRESS</h3></label>
+            <progress id="file" value="{{level.prog}}" max="{{level.fin}}" class="classprog"></progress>
           </div>
+          <a  href="{% url 'tower:engineer_level' level.level__name %}" class="btn btn-dark more-info">More Information</a>
       </div>
   </div>
   {% endfor %}

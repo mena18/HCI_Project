@@ -10,3 +10,20 @@ table.dataTable thead .sorting_desc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:before {
 bottom: .5em;
 }
+
+
+
+.square_card{
+  background-color: #202125;
+  color:white;
+  text-align: center;
+}
+.square_card p{
+  color:#4AA86F;
+  font-size:30px;
+}
+
+
+body{
+  background-color:  #16171B;
+}
