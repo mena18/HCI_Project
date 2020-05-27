@@ -79,7 +79,7 @@
 
 
 
-      const api_url = 'http://localhost:3000/elements'
+      const api_url = 'http://localhost:3000/posts'
 
       async function getData() {
         const response = await fetch(api_url);
@@ -130,7 +130,7 @@
   });
 
         //----------------------------------------------------------------
-        //console.log(sortedData_deadline);
+        console.log(sortedData_deadline);
         //console.log(sortedData_finished);
         //console.log(sortedData_level);
         //console.log(data);
@@ -148,7 +148,8 @@
         var count_deadline_length = sortedData_deadline.length;      // y- axies this will change after time
         var count_finished_length = sortedData_finished.length;
         var level_duplicate ;
-        var count = 1;                                               // to make (n) duplicate
+        var count = 1;
+        var month_check = [];                                      // to make (n) duplicate
         //***************************************************************************************************************************
         //***************************************** END **********************************************************
         //*************************************************************************************************************************** -
@@ -158,10 +159,17 @@
           const cols_deadline = sortedData_deadline[i].fields.deadline.split('-');
           years =cols_deadline[0];
           month = cols_deadline[1];
-          if(month.split('0') != null)
+          month_check = month ;
+          if(month_check.split('0') != null ) // probability there is 1 0 or 0 3
           {
-            month = month.split('0');
-            month = month[1];
+            month_check = month_check.split('0');
+            if(parseFloat(month_check[0]) != 0)
+            {
+            }
+            else{
+                  month = month_check[1];
+            }
+
           }
           month_years =month+"/"+years ;
           // -------push 0 in x- axies  and number of operation in y - axies if i == 0 --------
@@ -176,13 +184,14 @@
             const cols_deadline2 = sortedData_deadline[j].fields.deadline.split('-');
             months_duplicate = cols_deadline2[1];
             years_duplicate = cols_deadline2[0];
-           if (parseFloat(month) === parseFloat(months_duplicate)){
-             count = count + 1;
-             console.log(count);
-            }
-            else {
-              if(years === years_duplicate)
+
+            {
+              if(parseFloat(years) === parseFloat(years_duplicate))
               {
+                if (parseFloat(month) === parseFloat(months_duplicate)){
+                  count = count + 1;
+                  console.log(count);
+                 }
                 year_temp = true;
                 if(parseFloat(month) == parseFloat(months_duplicate) -1)
                 {
@@ -248,7 +257,7 @@
         console.log(xlabels);
         console.log(ydata);
         console.log("---------------------------------------------------------------------");
-        console.log(xlabels);
+      //  console.log(xlabels);
         //***************************************************************************************************************************
         //***************************************** END **********************************************************
         //***************************************************************************************************************************
@@ -299,19 +308,20 @@
             }
           }
           //-----------------------check for month deplicate-----------------------------------
-
+          var month_2 ;
           var j = i + 1 ;
           if (j < sortedData_finished.length) {
             const cols_deadline2 = sortedData_finished[j].fields.finished.split('-');
             months_duplicate = cols_deadline2[1];
             years_duplicate = cols_deadline2[0];
-           if (parseFloat(month) === parseFloat(months_duplicate)){
-             count = count + 1;
-             console.log(count);
-            }
-            else {
+
+             {
               if(years === years_duplicate)
               {
+                if (parseFloat(month) === parseFloat(months_duplicate)){
+                  count = count + 1;
+                  console.log(count);
+                 }
                 if(parseFloat(month) == parseFloat(months_duplicate) -1)
                 {
                   yactual.push(parseFloat(count_finished_length = count_finished_length - count)); //cannot subtract must stored in varaiable let count_deadline.length sortedData_deadline.length
@@ -342,11 +352,23 @@
                   if(i_3 == parseFloat(month))
                   {
                     yactual.push(parseFloat(count_finished_length = count_finished_length - count));
+                    if(x_loop == xlabels.length-1)
+                    {
+                      const colss = xlabels[x_loop].split('/');
+                      const new_month = (parseFloat(colss[0])+1);
+                      xlabels.push("0"+new_month+"/"+parseFloat(years_duplicate));
+                    }
                     x_loop++;
+
                   }
                   else{
-
                     yactual.push(parseFloat(count_finished_length));
+                    if(x_loop == xlabels.length-1)
+                    {
+                      const colss = xlabels[x_loop].split('/');
+                      const new_month = (parseFloat(colss[0])+1);
+                      xlabels.push("0"+new_month+"/"+parseFloat(years_duplicate));
+                    }
                     x_loop++;
                     count = 1;
                   }
@@ -354,6 +376,12 @@
                 for(var i_3 = 1 ; i_3< parseFloat(months_duplicate) ;i_3++)
                 {
                     yactual.push(parseFloat(count_finished_length));
+                    if(x_loop == xlabels.length-1)
+                    {
+                      const colss = xlabels[x_loop].split('/');
+                      const new_month = (parseFloat(colss[0])+1);
+                      xlabels.push("0"+new_month+"/"+parseFloat(years_duplicate));
+                    }
                     x_loop++;
                     count = 1;
                 }
