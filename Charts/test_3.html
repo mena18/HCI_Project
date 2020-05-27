@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <link type="text/css" rel="stylesheet" href="stylesheet.css" />
     <title>Engineer charts </title>
@@ -43,7 +44,7 @@
             <div class="info">
               <section>
                 <div class="chart">
-                  <button  type="button" onclick="setValues()">Zoom</button>
+                  <button  type="button" onclick="setValues()"class="btn btn-warning">Zoom In</button>
 
                   <canvas id="myChart" width="320" height="100"></canvas>
                   <h3></h3>
@@ -78,7 +79,7 @@
 
 
 
-      const api_url = 'http://localhost:3000/posts'
+      const api_url = 'http://localhost:3000/elements'
 
       async function getData() {
         const response = await fetch(api_url);
@@ -130,7 +131,7 @@
 
         //----------------------------------------------------------------
         //console.log(sortedData_deadline);
-        console.log(sortedData_finished);
+        //console.log(sortedData_finished);
         //console.log(sortedData_level);
         //console.log(data);
 
@@ -147,10 +148,12 @@
         var count_deadline_length = sortedData_deadline.length;      // y- axies this will change after time
         var count_finished_length = sortedData_finished.length;
         var level_duplicate ;
-      //  var actualPie = [];
         var count = 1;                                               // to make (n) duplicate
-//--------------------------------------------------------------------------------------------------------------------------
-  //------------------------sortedData_deadline ---------------------------------
+        //***************************************************************************************************************************
+        //***************************************** END **********************************************************
+        //*************************************************************************************************************************** -
+        //------------------------sortedData_deadline ---------------------------------
+
         for(var i=0 ;i<sortedData_deadline.length;i++){
           const cols_deadline = sortedData_deadline[i].fields.deadline.split('-');
           years =cols_deadline[0];
@@ -173,7 +176,7 @@
             const cols_deadline2 = sortedData_deadline[j].fields.deadline.split('-');
             months_duplicate = cols_deadline2[1];
             years_duplicate = cols_deadline2[0];
-           if (month === months_duplicate){
+           if (parseFloat(month) === parseFloat(months_duplicate)){
              count = count + 1;
              console.log(count);
             }
@@ -237,20 +240,22 @@
         xlabels.push(month_years);
         ydata.push(parseFloat(count_deadline_length = count_deadline_length - count)); //cannot subtract must stored in varaiable let count_deadline.length sortedData_deadline.length
         count = 1;
-
+        //***************************************************************************************************************************
+        //***************************************** END **********************************************************
+        //***************************************************************************************************************************
 
         //-----------------show xlabel and  y-axies (planned) data in console -------------------------------------------
         console.log(xlabels);
         console.log(ydata);
-
+        console.log("---------------------------------------------------------------------");
+        console.log(xlabels);
+        //***************************************************************************************************************************
+        //***************************************** END **********************************************************
+        //***************************************************************************************************************************
       //------------------------sortedData_finished (yactual)---------------------------------
-      //---------------------**************************************--------------------------------------
-      //---------------------**************************************--------------------------------------
-      //---------------------**************************************--------------------------------------
       var count_finished_length = sortedData_finished.length;
       var x_loop = 0 ;
-      console.log("---------------------------------------------------------------------");
-      console.log(xlabels);
+
       for(var i=0 ;i<sortedData_finished.length;i++){
         // -------push number of operation in y - axies if i == 0 --------
         /*if (i == 0)
@@ -259,7 +264,6 @@
         }*/
         if(sortedData_finished[i].fields.finished == null)
         {
-          //yactual.push(parseFloat(sortedData_deadline.length));
           continue;
         }
 
@@ -294,19 +298,14 @@
               }
             }
           }
-
-
-
-
           //-----------------------check for month deplicate-----------------------------------
-
 
           var j = i + 1 ;
           if (j < sortedData_finished.length) {
             const cols_deadline2 = sortedData_finished[j].fields.finished.split('-');
             months_duplicate = cols_deadline2[1];
             years_duplicate = cols_deadline2[0];
-           if (month === months_duplicate){
+           if (parseFloat(month) === parseFloat(months_duplicate)){
              count = count + 1;
              console.log(count);
             }
@@ -370,13 +369,13 @@
       yactual.push(parseFloat(count_finished_length = count_finished_length - count)); //cannot subtract must stored in varaiable let count_deadline.length sortedData_deadline.length
       count = 1;
       x_loop++;
-        console.log(yactual)
+      console.log(yactual)
 
-        //--------------------------------------------------------------------------------------------------------------------------------
-        //--------------------------------------------------------------------------------------------------------------------------------
-        //--------------------------------------------------------------------------------------------------------------------------------
-        var currentlevel ;
-        var count_null = 0;
+      //***************************************************************************************************************************
+      //***************************************** END **********************************************************
+      //***************************************************************************************************************************
+
+      var count_null = 0;
 
         for(var i=0 ;i<sortedData_level.length;i++){
           const cols_level = sortedData_level[i].fields.level;
@@ -421,14 +420,14 @@
           count = 1;
           count_null = 0 ;
 
-        //--------------------------------------------------------------------------------------------------------------------------------
-        //--------------------------------------------------------------------------------------------------------------------------------
-        //**-----------------------------------------------------------------------------------------------------------------------
-        var i_point,j_point ;
+          //***************************************************************************************************************************
+          //***************************************** END **********************************************************
+          //***************************************************************************************************************************
         var Type1 = 0,Type2=0,Type3 =0 ;
         var op ;
         i_point = (yactual.length-1);
         j_point= i_point - 1;
+
         if(parseFloat(yactual[j_point])-parseFloat(yactual[i_point])===0)
         {
           workerdata = [0,0,0];
@@ -436,7 +435,7 @@
         else{
           op = parseFloat(yactual[j_point])-parseFloat(yactual[i_point]);
           const cols = xlabels[i_point].split('/');
-          //cols[0]cols[1]
+          //cols[0]= month cols[1]= year
           for(var i=0 ;i<sortedData_finished.length;i++){
             if(sortedData_finished[i].fields.finished==null)
             {
@@ -471,6 +470,10 @@
         Type1 = 0;
         Type2 = 0;
         Type3 = 0;
+        //***************************************************************************************************************************
+        //***************************************** END **********************************************************
+        //***************************************************************************************************************************
+
 
 }
 
@@ -574,8 +577,8 @@
             var myChart3 = new Chart(ctx3, {
                 type: 'horizontalBar',
                 data: {
-                  labels:["level_1","level_2","level_3","level_4"],
-                    //labels:["level_1","level_2","level_3","level_4","level_5","level_6","level_7","level_8","level_9","level_10"],
+                  //labels:["level_1","level_2","level_3","level_4"],
+                    labels:["level_1","level_2","level_3","level_4","level_5","level_6","level_7","level_8","level_9","level_10"],
                     datasets: [{
                         label: 'level progress',
                         data: leveldata,
