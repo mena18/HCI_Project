@@ -149,7 +149,7 @@
         var count_finished_length = sortedData_finished.length;
         var level_duplicate ;
         var count = 1;
-        var month_check = [];                                      // to make (n) duplicate
+        var month_checker = [];                                           // to make (n) duplicate
         //***************************************************************************************************************************
         //***************************************** END **********************************************************
         //*************************************************************************************************************************** -
@@ -159,19 +159,19 @@
           const cols_deadline = sortedData_deadline[i].fields.deadline.split('-');
           years =cols_deadline[0];
           month = cols_deadline[1];
-          month_check = month ;
-          if(month_check.split('0') != null ) // probability there is 1 0 or 0 3
+          month_checker  = cols_deadline[1];
+          if( month_checker.split('0')!=null) // probability there is 1 0 or 0 3
           {
-            month_check = month_check.split('0');
-            if(parseFloat(month_check[0]) != 0)
+            month_checker = month_checker.split('0');
+            if(month_checker[0] === "")
             {
+                month = month_checker[1];
             }
-            else{
-                  month = month_check[1];
+            else {
+              month = month ;
             }
-
           }
-          month_years =month+"/"+years ;
+          month_years = month+"/"+years ;
           // -------push 0 in x- axies  and number of operation in y - axies if i == 0 --------
           if (i == 0)
           {
@@ -451,7 +451,7 @@
           //***************************************************************************************************************************
           //***************************************** END **********************************************************
           //***************************************************************************************************************************
-        var Type1 = 0,Type2=0,Type3 =0 ;
+        /*var Type1 = 0,Type2=0,Type3 =0 ;
         var op ;
         i_point = (yactual.length-1);
         j_point= i_point - 1;
@@ -497,7 +497,7 @@
         workerdata = [Type1,Type2,Type3];
         Type1 = 0;
         Type2 = 0;
-        Type3 = 0;
+        Type3 = 0;*/
         //***************************************************************************************************************************
         //***************************************** END **********************************************************
         //***************************************************************************************************************************
