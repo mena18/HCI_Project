@@ -1,4 +1,5 @@
 from django.shortcuts import render,HttpResponse,redirect,reverse
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from accounts.models import User
 from .models import *
@@ -176,8 +177,73 @@ def foreman_levels(request,num):
     levels = Level.objects.filter(foreman = request.user);
     level_num = Level.objects.get(name=num)
     operation_types = Operation_type.objects.filter(level=level_num)
-    context = {"level_num":level_num,'levels':levels,"operation_types":operation_types}
+    context = {"level_num":level_num.name,'levels':levels,"operation_types":operation_types,"current_level":level_num}
     return render(request,"foreman/level.html",context);
+
+
+def delete_pdf(request,id):
+    try:
+        report = Report.objects.get(id=id).delete()
+        return JsonResponse({"message":"deleted successfuly"})
+    except  Exception as e:
+        return JsonResponse({"message":"fff"})
+
+
+def create_pdf(request):
+    report = Report()
+
+    report.title = request.POST['title']
+    report.file = request.FILES['file']
+    report.level_id = request.POST['level']
+    report.writer = request.user;
+    report.save()
+    return redirect("tower:foreman_level",num=request.POST['level']) # soon to be changed
+
+
+def delete_operation(request,id):
+    try:
+        operation = Operation.objects.get(id=id).delete()
+        return JsonResponse({"message":"deleted successfuly"})
+    except  Exception as e:
+        return JsonResponse({"message":"Failed"})
+
+def create_operation(request):
+
+    operation = Operation()
+    operation.description = request.POST['description']
+    operation.must_finish = request.POST['must_finish'];
+    operation.deadline = request.POST['deadline'];
+    operation.worker_id = request.POST['worker'];
+    operation.level_id = request.POST['level'];
+    operation.type_id = name=request.POST['type'];
+    operation.save();
+    return redirect("tower:foreman_level",num=request.POST['level']) # soon to be changed
+    #operation.
+
+
+def operation_progress(request):
+    try:
+        operation = Operation.objects.get(id=request.POST['operation_id'])
+        operation.progress = request.POST['progress']
+        operation.save()
+        return redirect("tower:foreman_level",num=operation.type.level.name) # soon to be changed
+        #return JsonResponse({"message":"progress changed"})
+    except  Exception as e:
+        return JsonResponse({"message":"Failed"})
+
+
+
+
+
+def worker_with_some_type(request,type_id):
+    Op = Operation_type.objects.get(id = type_id)
+    workers = User.objects.filter(type = Op.allowed).values('id','first_name','last_name')
+    return JsonResponse(list(workers),safe=False);
+
+
+
+
+
 
 # -------------------------   End Foreman Actions  -------------------------
 

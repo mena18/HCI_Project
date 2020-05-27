@@ -27,11 +27,18 @@ urlpatterns = [
     path("engineer/foreman/delete",delete_foreman,name="delete_foreman"),
 
 
+    path("operation/delete/<int:id>",delete_operation,name="delete_operation"),
+    path("operation/create",create_operation,name="create_operation"),
+    path("operation/changeprogress",operation_progress,name="operation_progress"),
+
 
 
     path("foreman/home",foreman_home,name="foreman_home"),
     path('forman/levels',foreman_levels,name="foreman_levels"),
-    path('forman/levels/<int:num>',foreman_levels,name="foreman_level"),
+    path('forman/level/<int:num>',foreman_levels,name="foreman_level"),
+    path('forman/workers/<int:type_id>',worker_with_some_type,name="foreman_workers"),
+    path('pdf/delete/<int:id>',delete_pdf,name="delete_pdf"),
+    path('pdf/create',create_pdf,name="create_pdf"),
 
     path("worker/home",worker_home,name="worker_home"),
 

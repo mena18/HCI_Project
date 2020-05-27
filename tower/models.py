@@ -18,20 +18,25 @@ worker_choices = {
 ('plumber','plumber'),
 }
 
+class Level(models.Model):
+    foreman = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
+    name = models.IntegerField()
+
+    def __str__(self):
+        return f'LeveL({self.name})'
+
+    def files(self):
+        return Report.objects.filter(level = self)
+
 class Report(models.Model):
     file = models.FileField()
     writer = models.ForeignKey(User,on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
+    level = models.ForeignKey(Level,on_delete=models.CASCADE,default=1)
 
+    def get_path(self):
+        return "/media/"+str(self.file)
 
-class Level(models.Model):
-    foreman = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
-    name = models.IntegerField()
-    reports = models.ManyToManyField(Report,blank=True)
-
-
-    def __str__(self):
-        return f'LeveL({self.name})'
 
 
 class Operation_type(models.Model):
@@ -44,7 +49,7 @@ class Operation_type(models.Model):
 
 
     def operations(self):
-        return Operation.objects.filter(type=self)
+        return Operation.objects.filter(type=self).order_by("deadline")
 
 
 class Operation(models.Model):
@@ -63,7 +68,7 @@ class Operation(models.Model):
 
 
     def percent(self):
-        return self.progress/self.must_finish
+        return (self.progress*100)//self.must_finish
 
     def get_description(self):
         if(self.description):
