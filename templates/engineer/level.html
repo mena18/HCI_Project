@@ -42,7 +42,7 @@ Level {{level.name}}
                   <span class="float-right">Deadline : {{operation.deadline}} </span>
                 </p><br>
                 <div class="progress">
-                  <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">{{operation.progress}}/{{operation.must_finish}} ({{operation.percent}})% </div>
+                  <div class="progress-bar" role="progressbar" style='width: {{operation.percent}}%;' aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">({{operation.percent}})% </div>
                  </div>
               </li>
             {% endfor %}

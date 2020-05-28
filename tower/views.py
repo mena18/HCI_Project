@@ -9,6 +9,7 @@ import random
 from  datetime import datetime,timedelta
 import time
 from django.db.models import F
+from django.contrib import messages
 # Create your views here.
 
 
@@ -37,13 +38,18 @@ def get_workers_progress(request,level=None):
 # -------------------------   Engineer Actions  -------------------------
 @login_required
 def engineer_home(request):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     users = User.objects.all()
     context = seperate_users(users)
 
     return render(request,'engineer/home.html',context)
 
+
 @login_required
 def engineer_levels(request):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     context={}
     context['levels'] = levels_data();
     context['foremen'] = User.objects.filter(is_foreman=True);
@@ -51,12 +57,16 @@ def engineer_levels(request):
 
 @login_required
 def engineer_level(request,num):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     level = Level.objects.get(name=num)
     operation_types = Operation_type.objects.filter(level=level)
     return render(request,'engineer/level.html',{'operation_types':operation_types,'level':level})
 
 @login_required
 def engineer_workers(request):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     workers = User.objects.filter(is_worker = True);
     for i in workers:
         print(i.__dict__)
@@ -64,6 +74,8 @@ def engineer_workers(request):
 
 @login_required
 def engineer_foremen(request):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     foremen = User.objects.filter(is_foreman = True);
     print("*"*100,len(foremen))
     return render(request,'engineer/foremen.html',{'foremen':foremen})
@@ -71,6 +83,8 @@ def engineer_foremen(request):
 
 @login_required
 def remove_foreman(request,level_num):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     level = Level.objects.get(name = level_num)
     level.foreman = None
     level.save()
@@ -78,6 +92,8 @@ def remove_foreman(request,level_num):
 
 @login_required
 def assign_foreman(request):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     if(request.method!='POST'):
         return HttpResponse("forbidden")
 
@@ -91,8 +107,14 @@ def assign_foreman(request):
 
 @login_required
 def add_worker(request):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     if(request.method=='POST'):
         worker = User()
+        if(User.objects.filter(email=request.POST['email'])):
+            messages.add_message(request, messages.INFO, 'Email already Exists')
+            return redirect(reverse("tower:engineer_workers"))
+        worker.username = request.POST['email'];
         worker.email = request.POST['email'];
         worker.is_worker = True
         worker.set_password(request.POST['password'])
@@ -100,12 +122,15 @@ def add_worker(request):
         worker.last_name = request.POST['last_name'];
         worker.type = request.POST['type'];
         worker.save()
+        messages.add_message(request, messages.SUCCESS, 'created successfuly')
         return redirect(reverse("tower:engineer_workers"))
 
     return HttpResponse('forbidden')
 
 @login_required
 def edit_worker(request):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     if(request.method=='POST'):
         worker = User.objects.get(id=request.POST['id'])
         worker.email = request.POST['email'];
@@ -121,6 +146,8 @@ def edit_worker(request):
 
 @login_required
 def delete_worker(request):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     if request.method == "POST":
         lis = request.POST.getlist('id[]')
         User.objects.filter(id__in=lis).delete()
@@ -131,8 +158,13 @@ def delete_worker(request):
 
 @login_required
 def add_foreman(request):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     if(request.method=='POST'):
         worker = User()
+        if(User.objects.filter(email=request.POST['email'])):
+            messages.add_message(request, messages.INFO, 'Email already Exists')
+            return redirect(reverse("tower:engineer_foremen"))
         worker.email = request.POST['email'];
         worker.username = request.POST['email'];
         worker.is_foreman = True
@@ -140,12 +172,15 @@ def add_foreman(request):
         worker.first_name = request.POST['first_name'];
         worker.last_name = request.POST['last_name'];
         worker.save()
+        messages.add_message(request, messages.SUCCESS, 'created successfuly')
         return redirect(reverse("tower:engineer_foremen"))
 
     return HttpResponse('forbidden')
 
 @login_required
 def edit_foreman(request):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     if(request.method=='POST'):
         worker = User.objects.get(id=request.POST['id'])
         worker.email = request.POST['email'];
@@ -160,6 +195,8 @@ def edit_foreman(request):
 
 @login_required
 def delete_foreman(request):
+    if(not request.user.is_engineer):
+        return HttpResponse("403 forbidden")
     if request.method == "POST":
         lis = request.POST.getlist('id[]')
         User.objects.filter(id__in=lis).delete()
@@ -178,12 +215,16 @@ def delete_foreman(request):
 # -------------------------   Foreman Actions  -------------------------
 @login_required
 def foreman_home(request):
+    if(not request.user.is_foreman):
+        return HttpResponse("403 forbidden")
     levels = Level.objects.filter(foreman = request.user);
     context = {"levels":levels}
     return render(request,"foreman/home.html",context);
 
 @login_required
 def foreman_levels(request,num):
+    if(not request.user.is_foreman):
+        return HttpResponse("403 forbidden")
     levels = Level.objects.filter(foreman = request.user);
     level_num = Level.objects.get(name=num)
     operation_types = Operation_type.objects.filter(level=level_num)
@@ -192,6 +233,8 @@ def foreman_levels(request,num):
 
 @login_required
 def delete_pdf(request,id):
+    if(not request.user.is_foreman):
+        return HttpResponse("403 forbidden")
     try:
         report = Report.objects.get(id=id).delete()
         return JsonResponse({"message":"deleted successfuly"})
@@ -200,6 +243,8 @@ def delete_pdf(request,id):
 
 @login_required
 def create_pdf(request):
+    if(not request.user.is_foreman):
+        return HttpResponse("403 forbidden")
     report = Report()
 
     report.title = request.POST['title']
@@ -211,6 +256,8 @@ def create_pdf(request):
 
 @login_required
 def delete_operation(request,id):
+    if(not request.user.is_foreman):
+        return HttpResponse("403 forbidden")
     try:
         operation = Operation.objects.get(id=id).delete()
         return JsonResponse({"message":"deleted successfuly"})
@@ -219,6 +266,8 @@ def delete_operation(request,id):
 
 @login_required
 def create_operation(request):
+    if(not request.user.is_foreman):
+        return HttpResponse("403 forbidden")
 
     operation = Operation()
     operation.description = request.POST['description']
@@ -288,6 +337,8 @@ def worker_with_some_type(request,type_id):
 # -------------------------   Workers Actions  -------------------------
 @login_required
 def worker_home(request):
+    if(not request.user.is_worker):
+        return HttpResponse("403 forbidden")
     operations = Operation.objects.filter(worker=request.user,finished=None)
     finished_operations = Operation.objects.filter(worker=request.user).exclude(finished=None)
 
@@ -319,7 +370,7 @@ def download_operations(request,num=None):
     	  "level" : 2 ,
     	  "type" : 1,
     	  "deadline" : "2020-07-26" ,
-    	  "finished" : "2020-06-28",
+    	  "finished" : "2020-08-28",
           'worker_type':'painter',
 
         },{

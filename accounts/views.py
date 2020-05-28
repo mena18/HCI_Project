@@ -1,6 +1,8 @@
 from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth import authenticate,login,logout
 from accounts.models import User
+from django.contrib import messages
+
 # Create your views here.
 
 
@@ -22,9 +24,11 @@ def login_view(request):
             login(request,user);
             return redirect("/")
         else:
-            return HttpResponse("wrong password");
+            messages.add_message(request, messages.INFO, 'wrong password')
+            return redirect("/")
     except :
-        return HttpResponse("user dosen't exists ")
+        messages.add_message(request, messages.INFO, "user Dosen't exists ")
+        return redirect("/")
 
 
 
@@ -32,4 +36,3 @@ def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
         return redirect("/accounts/login")
-    

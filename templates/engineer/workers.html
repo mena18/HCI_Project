@@ -64,27 +64,27 @@
 
                 {% csrf_token %}
                 <div class="md-form mb-5">
-                  <input name="first_name" autocomplete="false" type="text" id="addName" class="form-control validate">
+                  <input required name="first_name" autocomplete="false" type="text" id="addName" class="form-control validate">
                   <label data-error="wrong" data-success="right" for="firstName">First Name</label>
                 </div>
 
                 <div class="md-form mb-5">
-                  <input name="last_name" autocomplete="false" type="text" id="addName" class="form-control validate">
+                  <input required name="last_name" autocomplete="false" type="text" id="addName" class="form-control validate">
                   <label data-error="wrong" data-success="right" for="lastName">Last Name</label>
                 </div>
 
                 <div class="md-form mb-5">
-                  <input name="email" readonly onfocus="this.removeAttribute('readonly');" autocomplete="off" type="email" id="addEmail" class="form-control validate">
+                  <input required name="email" readonly onfocus="this.removeAttribute('readonly');" autocomplete="off" type="email" id="addEmail" class="form-control validate">
                   <label data-error="wrong" data-success="right" for="inputOfficeInput">Email</label>
                 </div>
 
                 <div class="md-form mb-5">
-                  <input name="password" type="password" id="addpassword" class="form-control validate">
+                  <input required name="password" type="password" id="addpassword" class="form-control validate">
                   <label data-error="wrong" data-success="right" for="inputOfficeInput">Password</label>
                 </div>
 
                 <div class="md-form mb-5">
-                  <select name="type" class="browser-default custom-select custom-select-lg mb-3">
+                  <select required name="type" class="browser-default custom-select custom-select-lg mb-3">
                     <option value="" disabled selected>Choose Job</option>
                     <option value="painter">Painter</option>
                     <option value="plumber">Plumber</option>

@@ -21,7 +21,7 @@
         <div class="r_navbar">
             <header>
               <div class="left_area">
-                <h3>Coding <span>Snow</span></h3>
+                <h3>Project <span>Name</span></h3>
               </div>
               <input type="search" placeholder="search..">
               <div class="right_area">
@@ -41,6 +41,14 @@
         </div>
         <div class="r_content">
           <div style="height:1300px">
+            {% if messages %}
+
+                {% for message in messages %}
+                  <div class="alert alert-danger">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+            {% endif %}
             {% block content %}
             {% endblock %}
           </div>

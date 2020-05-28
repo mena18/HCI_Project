@@ -74,7 +74,7 @@ class Operation(models.Model):
         if(self.description):
             return self.description
         else:
-            return f'{self.type} ({self.must_finish})'
+            return f'{self.type} ({self.progress}/{self.must_finish})'
 
 class Messages(models.Model):
     level = models.ForeignKey(Operation,on_delete = models.CASCADE)
