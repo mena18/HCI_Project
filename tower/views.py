@@ -222,18 +222,38 @@ def create_operation(request):
 
 
 def operation_progress(request):
+
     try:
-        operation = Operation.objects.get(id=request.POST['operation_id'])
-        operation.progress = request.POST['progress']
-        operation.save()
+        operation = operation_progress(request,'foreman')
         return redirect("tower:foreman_level",num=operation.type.level.name) # soon to be changed
         #return JsonResponse({"message":"progress changed"})
     except  Exception as e:
         return JsonResponse({"message":"Failed"})
 
 
+def operation_progress_worker(request):
+    try:
+        operation = operation_progress(request,'foreman')
+        return redirect("tower:worker_home") # soon to be changed
+        #return JsonResponse({"message":"progress changed"})
+    except  Exception as e:
+        return JsonResponse({"message":"Failed"})
+
+    #return JsonResponse({"message":"progress changed"})
 
 
+def operation_progress(request,caller):
+    operation = Operation.objects.get(id=request.POST['operation_id'])
+    operation.progress = int(request.POST['progress'])
+    if(operation.progress == operation.must_finish):
+        operation.finished = datetime.now()
+    elif(operation.progress < operation.must_finish):
+        operation.finished = None
+    else:
+        raise Exception("")
+
+    operation.save()
+    return operation
 
 def worker_with_some_type(request,type_id):
     Op = Operation_type.objects.get(id = type_id)
@@ -255,12 +275,16 @@ def worker_with_some_type(request,type_id):
 
 # -------------------------   Workers Actions  -------------------------
 def worker_home(request):
-    return render(request,"worker/home.html");
+    operations = Operation.objects.filter(worker=request.user,finished=None)
+    finished_operations = Operation.objects.filter(worker=request.user).exclude(finished=None)
+
+    context={}
+    context['operations'] = operations
+    context['finished_operations'] = finished_operations
+    return render(request,"worker/home.html",context);
 
 
 # -------------------------   End Workers Actions  -------------------------
-
-
 
 
 
@@ -315,7 +339,7 @@ def download_operations(request):
           "title": "json-server4",
           "author": "typicode4",
 
-    	  "level" : 1,
+    	  "level" : 2,
     	  "type" : 1,
     	  "deadline" : "2020-03-27" ,
     	  "finished" : "2020-03-25"

@@ -32,6 +32,7 @@ urlpatterns = [
     path("operation/delete/<int:id>",delete_operation,name="delete_operation"),
     path("operation/create",create_operation,name="create_operation"),
     path("operation/changeprogress",operation_progress,name="operation_progress"),
+    path("operation/changeprogress/worker",operation_progress_worker,name="operation_progress_worker"),
 
 
 
