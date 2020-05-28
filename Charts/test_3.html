@@ -130,9 +130,9 @@
   });
 
         //----------------------------------------------------------------
-        console.log(sortedData_deadline);
+        //console.log(sortedData_deadline);
         //console.log(sortedData_finished);
-        //console.log(sortedData_level);
+        console.log(sortedData_level);
         //console.log(data);
 
         //----------------------------------------------------------------
@@ -409,11 +409,12 @@
           const cols_level = sortedData_level[i].fields.level;
           currentlevel = cols_level;
           //-----------------------check for level deplicate-----------------------------------
-          var j = i + 1
-          ;
+          var j = i + 1;
+
           if (j < sortedData_level.length) {
             const cols_level2 = sortedData_level[j].fields.level;
             level_duplicate = cols_level2;
+
            if (currentlevel === level_duplicate){
              count = count + 1;
              if(sortedData_level[i].fields.finished == null)
@@ -430,10 +431,24 @@
                   {
                     count_null = count_null + 1 ;
                   }
-                  leveldata.push(parseFloat(((count - count_null)/count)*100)); //cannot subtract must stored in varaiable let count_deadline.length sortedData_deadline.length
+                  //  leveldata        =              [l1,l2,l3,l4,.....,l9]
+                  leveldata[currentlevel-1] =parseFloat(((count - count_null)/count)*100);
                   count = 1;
                   count_null = 0 ;
                 }
+                else{
+
+                  if(sortedData_level[i].fields.finished == null)
+                  {
+                    count_null = count_null + 1 ;
+                  }
+                  //  leveldata        =              [l1,l2,l3,l4,.....,l9]
+                  leveldata[currentlevel-1] =parseFloat(((count - count_null)/count)*100);
+                  count = 1;
+                  count_null = 0 ;
+                }
+
+
 
             }
           }
@@ -444,7 +459,7 @@
           {
             count_null = count_null + 1 ;
           }
-          leveldata.push(parseFloat(((count - count_null)/count)*100)); //cannot subtract must stored in varaiable let count_deadline.length sortedData_deadline.length
+          leveldata[currentlevel-1] =parseFloat(((count - count_null)/count)*100); //cannot subtract must stored in varaiable let count_deadline.length sortedData_deadline.length
           count = 1;
           count_null = 0 ;
 

@@ -37,7 +37,7 @@
       "title": "json-server4",
       "author": "typicode4",
 	  "fields" : {
-	  "level" : 1,
+	  "level" : 2,
 	  "type" : 1,
 	  "deadline" : "2020-03-27" ,
 	  "finished" : "2020-03-25"
@@ -48,7 +48,7 @@
       "title": "json-server5",
       "author": "typicode5",
 	  "fields" : {
-	  "level" : 3,
+	  "level" : 2,
 	  "type" : 2,
 	  "deadline" : "2021-03-25" ,
 	  "finished" : "2020-07-25"
@@ -59,9 +59,9 @@
       "title": "json-server5",
       "author": "typicode5",
 	  "fields" : {
-	  "level" : 4,
+	  "level" : 10,
 	  "type" : 1,
-	  "deadline" : "2021-11-25" ,
+	  "deadline" : "2021-10-25" ,
 	  "finished" : "2020-07-25"
 	  }
 	 }
