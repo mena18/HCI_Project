@@ -8,7 +8,7 @@ from django.core import serializers
 import random
 from  datetime import datetime,timedelta
 import time
-
+from django.db.models import F
 # Create your views here.
 
 
@@ -289,19 +289,15 @@ def worker_home(request):
 
 
 # testing
-def download_operations(request):
-    # operations = Operation.objects.all().values();
-    # return JsonResponse(list(operations),safe=False);
-
-
-
-
-    # operations = Operation.objects.all();
-    # operations = serializers.serialize('json', operations)
-    # return HttpResponse(operations, content_type="text/json-comment-filtered")
-
-
-    data = [
+def download_operations(request,num=None):
+    if(num==None):
+        operations = Operation.objects.all().values('deadline','finished','level','type',worker_type=F('worker__type'));
+        return JsonResponse(list(operations),safe=False);
+    elif(str(num).isdigit() and  int(num)>=1 and int(num)<=10):
+        operations = Operation.objects.filter(level__name=int(num)).values('deadline','finished','level','type',worker_type=F('worker__type'));
+        return JsonResponse(list(operations),safe=False);
+    elif(num=='test'):
+        data = [
         {
           "id": 1,
           "title": "json-server",
@@ -310,7 +306,8 @@ def download_operations(request):
     	  "level" : 2 ,
     	  "type" : 1,
     	  "deadline" : "2020-07-26" ,
-    	  "finished" : "2020-06-28"
+    	  "finished" : "2020-06-28",
+          'worker_type':'painter',
 
         },{
           "id": 2,
@@ -320,7 +317,8 @@ def download_operations(request):
     	  "level" : 4 ,
     	  "type" : 2,
     	  "deadline" : "2020-07-30" ,
-    	  "finished" : None
+    	  "finished" : None,
+          'worker_type':'plumber',
 
     	 },
     	 {
@@ -331,7 +329,8 @@ def download_operations(request):
     	  "level" : 2 ,
     	  "type" : 2,
     	  "deadline" : "2020-06-25" ,
-    	  "finished" : "2020-06-27"
+    	  "finished" : "2020-06-27",
+          'worker_type':'plumber',
 
     	 },
     	 {
@@ -342,32 +341,38 @@ def download_operations(request):
     	  "level" : 2,
     	  "type" : 1,
     	  "deadline" : "2020-03-27" ,
-    	  "finished" : "2020-03-25"
+    	  "finished" : "2020-03-25",
+          'worker_type':'painter',
 
     	 },
     	 {
           "id": 5,
           "title": "json-server5",
           "author": "typicode5",
-    	  "level" : 3,
+
+    	  "level" : 2,
     	  "type" : 2,
     	  "deadline" : "2021-03-25" ,
-    	  "finished" : "2020-07-25"
+    	  "finished" : "2020-07-25",
+          'worker_type':'plumber',
 
     	 },
-         {
-           "id": 6,
-           "title": "json-server5",
-           "author": "typicode5",
-     	  "level" : 4,
-     	  "type" : 2,
-     	  "deadline" : "2020-05-25" ,
-     	  "finished" : "2020-04-25"
-             	 }
+    	 {
+          "id": 6,
+          "title": "json-server5",
+          "author": "typicode5",
+
+    	  "level" : 10,
+    	  "type" : 1,
+    	  "deadline" : "2021-10-25" ,
+    	  "finished" : "2020-07-25",
+          'worker_type':'painter',
+
+    	 }
       ]
 
 
-    return JsonResponse(data,safe=False);
+        return JsonResponse(list(data),safe=False);
 
 
 
@@ -415,7 +420,33 @@ def change_workers_names(request):
 
 
 def test(request):
-    return add_operations(request)
+    return assign_worker(request)
+
+
+
+def assign_worker(request):
+    counter=1
+    operations = Operation.objects.all()
+    for op in operations:
+        if(op.worker==None):
+            workers = User.objects.filter(type = op.type.allowed);
+            op.worker = random.choice(workers)
+            op.save()
+        if(counter%10==0):
+            print(counter)
+
+        counter+=1
+
+
+def mark_finished(request):
+    type = Operation_type()
+    operations = Operation.objects.all()
+    for op in operations:
+        if op.finished!=None:
+            op.progress = op.must_finish
+            op.save()
+
+
 
 
 def add_operation_types(request):
