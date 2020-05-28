@@ -7,10 +7,11 @@
 
 
 
+    const url1 = 'http://127.0.0.1:8000/test/download_operations/test'   // to get test operation
+    const url2 = 'http://127.0.0.1:8000/test/download_operations/3'      // or any other number to represent level
+    const url3 = 'http://127.0.0.1:8000/test/download_operations'       // to get all of the operations
 
-
-      const api_url = 'http://127.0.0.1:8000/test/download_operations/test'
-
+    const api_url = url1
 
       async function getData() {
         const response = await fetch(api_url);

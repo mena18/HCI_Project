@@ -1,14 +1,23 @@
 body{
   /* background-color: #ccc; */
-  background-color:  #16171B;
+  background-color:  #1D1E38;
 }
 .cblack{
-    color:black;
+    color:white;
 }
-
+h1{
+  color:white;
+}
+.card-header{
+  background-color: #252C48;
+}
+.card-body,.list-group-item{
+background-color: #1c2235;
+  color:white;
+}
 .progress_part
 {
-  background: #f2f2f2;
+
   width: 68%;
   display: inline-block;
   margin: 5px;
@@ -28,7 +37,7 @@ body{
 }
 .reports
 {
-  background: #f2f2f2;
+
   width: 30%;
   height:700px;
   float:right;
@@ -41,6 +50,10 @@ body{
   height: 600px;
   margin: 10px;
   box-shadow: -3px -3px 5px #bfbfbf;
+  background-color: #252C48;
+}
+a{
+  color:white;
 }
 .pdf
 {
@@ -67,4 +80,5 @@ body{
 {
   width: 100%;
   font-size: 30px;
+  color:white;
 }

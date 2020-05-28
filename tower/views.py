@@ -35,44 +35,48 @@ def get_workers_progress(request,level=None):
 
 
 # -------------------------   Engineer Actions  -------------------------
+@login_required
 def engineer_home(request):
     users = User.objects.all()
     context = seperate_users(users)
 
     return render(request,'engineer/home.html',context)
 
+@login_required
 def engineer_levels(request):
     context={}
     context['levels'] = levels_data();
     context['foremen'] = User.objects.filter(is_foreman=True);
     return render(request,'engineer/levels.html',context)
 
+@login_required
 def engineer_level(request,num):
     level = Level.objects.get(name=num)
     operation_types = Operation_type.objects.filter(level=level)
     return render(request,'engineer/level.html',{'operation_types':operation_types,'level':level})
 
-
+@login_required
 def engineer_workers(request):
     workers = User.objects.filter(is_worker = True);
     for i in workers:
         print(i.__dict__)
     return render(request,'engineer/workers.html',{'workers':workers})
 
+@login_required
 def engineer_foremen(request):
     foremen = User.objects.filter(is_foreman = True);
     print("*"*100,len(foremen))
     return render(request,'engineer/foremen.html',{'foremen':foremen})
 
 
-
+@login_required
 def remove_foreman(request,level_num):
     level = Level.objects.get(name = level_num)
     level.foreman = None
     level.save()
     return redirect(reverse('tower:engineer_levels'))
 
-
+@login_required
 def assign_foreman(request):
     if(request.method!='POST'):
         return HttpResponse("forbidden")
@@ -85,7 +89,7 @@ def assign_foreman(request):
 
     return redirect(reverse('tower:engineer_levels'))
 
-
+@login_required
 def add_worker(request):
     if(request.method=='POST'):
         worker = User()
@@ -100,6 +104,7 @@ def add_worker(request):
 
     return HttpResponse('forbidden')
 
+@login_required
 def edit_worker(request):
     if(request.method=='POST'):
         worker = User.objects.get(id=request.POST['id'])
@@ -114,6 +119,7 @@ def edit_worker(request):
 
     return HttpResponse('forbidden')
 
+@login_required
 def delete_worker(request):
     if request.method == "POST":
         lis = request.POST.getlist('id[]')
@@ -123,6 +129,7 @@ def delete_worker(request):
     return HttpResponse('forbidden')
 
 
+@login_required
 def add_foreman(request):
     if(request.method=='POST'):
         worker = User()
@@ -137,6 +144,7 @@ def add_foreman(request):
 
     return HttpResponse('forbidden')
 
+@login_required
 def edit_foreman(request):
     if(request.method=='POST'):
         worker = User.objects.get(id=request.POST['id'])
@@ -150,6 +158,7 @@ def edit_foreman(request):
 
     return HttpResponse('forbidden')
 
+@login_required
 def delete_foreman(request):
     if request.method == "POST":
         lis = request.POST.getlist('id[]')
@@ -167,12 +176,13 @@ def delete_foreman(request):
 
 
 # -------------------------   Foreman Actions  -------------------------
-
+@login_required
 def foreman_home(request):
     levels = Level.objects.filter(foreman = request.user);
     context = {"levels":levels}
     return render(request,"foreman/home.html",context);
 
+@login_required
 def foreman_levels(request,num):
     levels = Level.objects.filter(foreman = request.user);
     level_num = Level.objects.get(name=num)
@@ -180,7 +190,7 @@ def foreman_levels(request,num):
     context = {"level_num":level_num.name,'levels':levels,"operation_types":operation_types,"current_level":level_num}
     return render(request,"foreman/level.html",context);
 
-
+@login_required
 def delete_pdf(request,id):
     try:
         report = Report.objects.get(id=id).delete()
@@ -188,7 +198,7 @@ def delete_pdf(request,id):
     except  Exception as e:
         return JsonResponse({"message":"fff"})
 
-
+@login_required
 def create_pdf(request):
     report = Report()
 
@@ -199,7 +209,7 @@ def create_pdf(request):
     report.save()
     return redirect("tower:foreman_level",num=request.POST['level']) # soon to be changed
 
-
+@login_required
 def delete_operation(request,id):
     try:
         operation = Operation.objects.get(id=id).delete()
@@ -207,6 +217,7 @@ def delete_operation(request,id):
     except  Exception as e:
         return JsonResponse({"message":"Failed"})
 
+@login_required
 def create_operation(request):
 
     operation = Operation()
@@ -220,7 +231,7 @@ def create_operation(request):
     return redirect("tower:foreman_level",num=request.POST['level']) # soon to be changed
     #operation.
 
-
+@login_required
 def operation_progress(request):
 
     try:
@@ -230,7 +241,7 @@ def operation_progress(request):
     except  Exception as e:
         return JsonResponse({"message":"Failed"})
 
-
+@login_required
 def operation_progress_worker(request):
     try:
         operation = operation_progress(request,'foreman')
@@ -241,7 +252,7 @@ def operation_progress_worker(request):
 
     #return JsonResponse({"message":"progress changed"})
 
-
+@login_required
 def operation_progress(request,caller):
     operation = Operation.objects.get(id=request.POST['operation_id'])
     operation.progress = int(request.POST['progress'])
@@ -255,6 +266,7 @@ def operation_progress(request,caller):
     operation.save()
     return operation
 
+@login_required
 def worker_with_some_type(request,type_id):
     Op = Operation_type.objects.get(id = type_id)
     workers = User.objects.filter(type = Op.allowed).values('id','first_name','last_name')
@@ -274,6 +286,7 @@ def worker_with_some_type(request,type_id):
 
 
 # -------------------------   Workers Actions  -------------------------
+@login_required
 def worker_home(request):
     operations = Operation.objects.filter(worker=request.user,finished=None)
     finished_operations = Operation.objects.filter(worker=request.user).exclude(finished=None)

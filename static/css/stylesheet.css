@@ -6,8 +6,8 @@
   font-family: 'Corben', Georgia, Times, serif;
 }
 body{
-  background-color: #16171B;
-
+  /* background-color: #16171B; */
+  background-color: #1D1E38;
 }
 p, div {
     font-family: 'Nobile', Helvetica, Arial, sans-serif;
@@ -146,7 +146,8 @@ color:white;
   padding-bottom: 30px;
   margin-top: 30px;
   text-align: center;
-  background-color: #202125;
+  /* background-color: #202125; */
+  background-color: #262B49;
 }
 .chart h3{
 margin-top: 22px;
