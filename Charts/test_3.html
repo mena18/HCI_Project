@@ -79,7 +79,7 @@
 
 
 
-      const api_url = 'http://localhost:3000/posts'
+      const api_url = 'http://mina381.pythonanywhere.com/test/download_operations'
 
       async function getData() {
         const response = await fetch(api_url);
@@ -87,8 +87,8 @@
         const sortedData_deadline = data.slice().sort(function (a, b) {
     // '2014-03-01/'.split('-')
     // gives ["2014", "03", "1"]
-    a = a.fields.deadline.split('-');
-    b = b.fields.deadline.split('-');
+    a = a.deadline.split('-');
+    b = b.deadline.split('-');
     return a[0] - b[0] || a[1] - b[1] || a[2] - b[2] ;
 });
 
@@ -97,16 +97,16 @@
     const sortedData_finished = data.slice().sort(function (a, b) {
     // '2014-03-01/'.split('-')
     // gives ["2014", "03", "1"]
-    if(a.fields.finished == null || b.fields.finished == null)
+    if(a.finished == null || b.finished == null)
     {
-      if(a.fields.finished == null && b.fields.finished != null)
+      if(a.finished == null && b.finished != null)
       {
-          b = b.fields.finished.split('-');
+          b = b.finished.split('-');
         return 0-b[0] || 0-b[1] || 0-b[2];
       }
-      else if(a.fields.finished != null && b.fields.finished == null)
+      else if(a.finished != null && b.finished == null)
       {
-        a = a.fields.finished.split('-');
+        a = a.finished.split('-');
         return a[0]-0 || a[1]-0 || a[2]-0;
       }
       else {
@@ -114,8 +114,8 @@
       }
     }
     else{
-    a = a.fields.finished.split('-');
-    b = b.fields.finished.split('-');
+    a = a.finished.split('-');
+    b = b.finished.split('-');
     return a[0] - b[0] || a[1] - b[1] || a[2] - b[2] ;
     }
   });
@@ -124,15 +124,15 @@
   const sortedData_level = data.slice().sort(function (a, b) {
   // '2014-03-01/'.split('-')
   // gives ["2014", "03", "1"]
-  a = a.fields.level;
-  b = b.fields.level;
+  a = a.level;
+  b = b.level;
   return a - b  ;
   });
 
         //----------------------------------------------------------------
         //console.log(sortedData_deadline);
         //console.log(sortedData_finished);
-        console.log(sortedData_level);
+        //console.log(sortedData_level);
         //console.log(data);
 
         //----------------------------------------------------------------
@@ -156,7 +156,7 @@
         //------------------------sortedData_deadline ---------------------------------
 
         for(var i=0 ;i<sortedData_deadline.length;i++){
-          const cols_deadline = sortedData_deadline[i].fields.deadline.split('-');
+          const cols_deadline = sortedData_deadline[i].deadline.split('-');
           years =cols_deadline[0];
           month = cols_deadline[1];
           month_checker  = cols_deadline[1];
@@ -173,15 +173,23 @@
           }
           month_years = month+"/"+years ;
           // -------push 0 in x- axies  and number of operation in y - axies if i == 0 --------
+
+
           if (i == 0)
           {
-              xlabels.push(0);
+            xlabels.push(0);
+            ydata.push(parseFloat(sortedData_deadline.length));
+            for(var ix = 1 ; ix< parseFloat(month);ix++)
+            {
+              xlabels.push(ix +"/"+years);
               ydata.push(parseFloat(sortedData_deadline.length));
+            }
+
           }
           //-----------------------check for month deplicate-----------------------------------
           var j = i + 1 ;
           if (j < sortedData_deadline.length) {
-            const cols_deadline2 = sortedData_deadline[j].fields.deadline.split('-');
+            const cols_deadline2 = sortedData_deadline[j].deadline.split('-');
             months_duplicate = cols_deadline2[1];
             years_duplicate = cols_deadline2[0];
 
@@ -271,13 +279,13 @@
         {
             yactual.push(parseFloat(sortedData_finished.length))
         }*/
-        if(sortedData_finished[i].fields.finished == null)
+        if(sortedData_finished[i].finished == null)
         {
           continue;
         }
 
         else {
-          const cols_finished = sortedData_finished[i].fields.finished.split('-');
+          const cols_finished = sortedData_finished[i].finished.split('-');
           month = cols_finished[1];
           years =cols_finished[0];
 
@@ -311,7 +319,7 @@
           var month_2 ;
           var j = i + 1 ;
           if (j < sortedData_finished.length) {
-            const cols_deadline2 = sortedData_finished[j].fields.finished.split('-');
+            const cols_deadline2 = sortedData_finished[j].finished.split('-');
             months_duplicate = cols_deadline2[1];
             years_duplicate = cols_deadline2[0];
 
@@ -406,18 +414,18 @@
       var count_null = 0;
 
         for(var i=0 ;i<sortedData_level.length;i++){
-          const cols_level = sortedData_level[i].fields.level;
+          const cols_level = sortedData_level[i].level;
           currentlevel = cols_level;
           //-----------------------check for level deplicate-----------------------------------
           var j = i + 1;
 
           if (j < sortedData_level.length) {
-            const cols_level2 = sortedData_level[j].fields.level;
+            const cols_level2 = sortedData_level[j].level;
             level_duplicate = cols_level2;
 
            if (currentlevel === level_duplicate){
              count = count + 1;
-             if(sortedData_level[i].fields.finished == null)
+             if(sortedData_level[i].finished == null)
              {
                count_null = count_null + 1 ;
              }
@@ -427,7 +435,7 @@
 
                 if(parseFloat(currentlevel) == parseFloat(level_duplicate) -1)
                 {
-                  if(sortedData_level[i].fields.finished == null)
+                  if(sortedData_level[i].finished == null)
                   {
                     count_null = count_null + 1 ;
                   }
@@ -438,7 +446,7 @@
                 }
                 else{
 
-                  if(sortedData_level[i].fields.finished == null)
+                  if(sortedData_level[i].finished == null)
                   {
                     count_null = count_null + 1 ;
                   }
@@ -455,7 +463,7 @@
                   //console.log(parseFloat(cols_deadline[1]));
         }
         //----------------to push last element in x- axies and y - axies(planned)----------------------------------
-          if(sortedData_level[sortedData_level.length-1].fields.finished == null)
+          if(sortedData_level[sortedData_level.length-1].finished == null)
           {
             count_null = count_null + 1 ;
           }
@@ -480,26 +488,26 @@
           const cols = xlabels[i_point].split('/');
           //cols[0]= month cols[1]= year
           for(var i=0 ;i<sortedData_finished.length;i++){
-            if(sortedData_finished[i].fields.finished==null)
+            if(sortedData_finished[i].finished==null)
             {
               continue;
             }
             else{
-              const cols_deadline2 = sortedData_finished[i].fields.finished.split('-');
+              const cols_deadline2 = sortedData_finished[i].finished.split('-');
               months_duplicate = cols_deadline2[1];
               years_duplicate = cols_deadline2[0];
               if(parseFloat(cols[1]) === parseFloat(years_duplicate)){
                 if(parseFloat(cols[0])===parseFloat(months_duplicate))
                 {
-                  const type_check = sortedData_finished[i].fields.type;
-                  if(type_check == 1)
+                  const type_check = sortedData_finished[i].worker_type;
+                  if(type_check == "plumber")
                   {
                     Type1++;
                   }
-                  else if (type_check == 2)
+                  else if (type_check == "painter")
                   {
                     Type2++;
-                  }else if(type_check == 3)
+                  }else if(type_check == "cleaner")
                   {
                     Type3++;
                   }
@@ -513,6 +521,15 @@
         Type1 = 0;
         Type2 = 0;
         Type3 = 0;
+        //----------------------------------------------------------------
+        console.log(yactual);
+        //console.log(sortedData_deadline);
+        //console.log(sortedData_finished);
+        //console.log(sortedData_level);
+        //console.log(data);
+
+        //----------------------------------------------------------------
+
         //***************************************************************************************************************************
         //***************************************** END **********************************************************
         //***************************************************************************************************************************
@@ -694,7 +711,7 @@
             var myChart2 = new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
-                    labels:["Type1","Type2","Type3"],
+                    labels:["Plumber","Painter","Cleaner"],
                     datasets: [{
                         label: 'Work of workers',
                         data: workerdata,
