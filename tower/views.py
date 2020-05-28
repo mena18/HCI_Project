@@ -217,6 +217,7 @@ def delete_foreman(request):
 def foreman_home(request):
     if(not request.user.is_foreman):
         return HttpResponse("403 forbidden")
+
     levels = Level.objects.filter(foreman = request.user);
     context = {"levels":levels}
     return render(request,"foreman/home.html",context);
@@ -357,87 +358,10 @@ def download_operations(request,num=None):
     if(num==None):
         operations = Operation.objects.all().values('deadline','finished','level','type',worker_type=F('worker__type'));
         return JsonResponse(list(operations),safe=False);
-    elif(str(num).isdigit() and  int(num)>=1 and int(num)<=10):
-        operations = Operation.objects.filter(level__name=int(num)).values('deadline','finished','level','type',worker_type=F('worker__type'));
+    else:
+        levels = Level.objects.filter(foreman__id=num).values_list('id', flat=True)
+        operations = Operation.objects.filter(level__id__in=levels).values('deadline','finished','level','type',worker_type=F('worker__type'));
         return JsonResponse(list(operations),safe=False);
-    elif(num=='test'):
-        data = [
-        {
-          "id": 1,
-          "title": "json-server",
-          "author": "typicode",
-
-    	  "level" : 2 ,
-    	  "type" : 1,
-    	  "deadline" : "2020-07-26" ,
-    	  "finished" : "2020-08-28",
-          'worker_type':'painter',
-
-        },{
-          "id": 2,
-          "title": "json-server2",
-          "author": "typicode2",
-
-    	  "level" : 4 ,
-    	  "type" : 2,
-    	  "deadline" : "2020-07-30" ,
-    	  "finished" : None,
-          'worker_type':'plumber',
-
-    	 },
-    	 {
-          "id": 3,
-          "title": "json-server3",
-          "author": "typicode3",
-
-    	  "level" : 2 ,
-    	  "type" : 2,
-    	  "deadline" : "2020-06-25" ,
-    	  "finished" : "2020-06-27",
-          'worker_type':'plumber',
-
-    	 },
-    	 {
-          "id": 4,
-          "title": "json-server4",
-          "author": "typicode4",
-
-    	  "level" : 2,
-    	  "type" : 1,
-    	  "deadline" : "2020-03-27" ,
-    	  "finished" : "2020-03-25",
-          'worker_type':'painter',
-
-    	 },
-    	 {
-          "id": 5,
-          "title": "json-server5",
-          "author": "typicode5",
-
-    	  "level" : 2,
-    	  "type" : 2,
-    	  "deadline" : "2021-03-25" ,
-    	  "finished" : "2020-07-25",
-          'worker_type':'plumber',
-
-    	 },
-    	 {
-          "id": 6,
-          "title": "json-server5",
-          "author": "typicode5",
-
-    	  "level" : 10,
-    	  "type" : 1,
-    	  "deadline" : "2021-10-25" ,
-    	  "finished" : "2020-07-25",
-          'worker_type':'painter',
-
-    	 }
-      ]
-
-
-        return JsonResponse(list(data),safe=False);
-
 
 
 

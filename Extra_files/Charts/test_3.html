@@ -79,8 +79,7 @@
 
 
 
-
-      const api_url = 'http://127.0.0.1:8000/test/download_operations'
+      const api_url = 'http://mina381.pythonanywhere.com/test/download_operations'
 
 
       async function getData() {
@@ -134,7 +133,7 @@
         //----------------------------------------------------------------
         //console.log(sortedData_deadline);
         //console.log(sortedData_finished);
-        console.log(sortedData_level);
+        //console.log(sortedData_level);
         //console.log(data);
 
         //----------------------------------------------------------------
@@ -175,10 +174,18 @@
           }
           month_years = month+"/"+years ;
           // -------push 0 in x- axies  and number of operation in y - axies if i == 0 --------
+
+
           if (i == 0)
           {
-              xlabels.push(0);
+            xlabels.push(0);
+            ydata.push(parseFloat(sortedData_deadline.length));
+            for(var ix = 1 ; ix< parseFloat(month);ix++)
+            {
+              xlabels.push(ix +"/"+years);
               ydata.push(parseFloat(sortedData_deadline.length));
+            }
+
           }
           //-----------------------check for month deplicate-----------------------------------
           var j = i + 1 ;
@@ -493,15 +500,17 @@
               if(parseFloat(cols[1]) === parseFloat(years_duplicate)){
                 if(parseFloat(cols[0])===parseFloat(months_duplicate))
                 {
-                  const type_check = sortedData_finished[i].type;
-                  if(type_check == 1)
+
+                  const type_check = sortedData_finished[i].worker_type;
+                  if(type_check == "plumber")
+
                   {
                     Type1++;
                   }
-                  else if (type_check == 2)
+                  else if (type_check == "painter")
                   {
                     Type2++;
-                  }else if(type_check == 3)
+                  }else if(type_check == "cleaner")
                   {
                     Type3++;
                   }
@@ -515,6 +524,15 @@
         Type1 = 0;
         Type2 = 0;
         Type3 = 0;
+        //----------------------------------------------------------------
+        console.log(yactual);
+        //console.log(sortedData_deadline);
+        //console.log(sortedData_finished);
+        //console.log(sortedData_level);
+        //console.log(data);
+
+        //----------------------------------------------------------------
+
         //***************************************************************************************************************************
         //***************************************** END **********************************************************
         //***************************************************************************************************************************
@@ -696,7 +714,7 @@
             var myChart2 = new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
-                    labels:["Type1","Type2","Type3"],
+                    labels:["Plumber","Painter","Cleaner"],
                     datasets: [{
                         label: 'Work of workers',
                         data: workerdata,

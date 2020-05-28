@@ -165,7 +165,7 @@
               </button>
             </div>
             <div class="modal-body mx-3">
-              <p class="text-center h4">Are you sure to delete selected row?</p>
+              <p style="color:black;" class="text-center h4">Are you sure to delete selected row?</p>
 
             </div>
             <div class="modal-footer d-flex justify-content-center deleteButtonsWrapper">
@@ -211,7 +211,7 @@
             >Edit<i class="fas fa-pencil-square-o ml-1"></i></a>
         </td> -->
         <td>
-          <input type="checkbox" name="id[]" value="{{worker.id}}">
+          <input class="checkbox-button" type="checkbox" name="id[]" value="{{worker.id}}">
         </td>
     </tr>
     {% endfor %}
@@ -261,14 +261,15 @@
 
 
 <script >
-$(document).ready(function () {
   let counter = 0;
   $('#table').DataTable({
     columnDefs: [{orderable: false,targets: 4}]
   });
   $('.dataTables_length').addClass('bs-select');
 
-  $('input[type="checkbox"]').click(function(){
+  $(document).ready(function () {
+  $('.checkbox-button').click(function(){
+      console.log("clicked");
       if($(this).prop("checked") == true){
           counter+=1;
           $('#delete_button').attr('disabled',false);
